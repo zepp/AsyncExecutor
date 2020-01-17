@@ -1,2 +1,2 @@
-include ':app'
+include ':library', ':app'
 rootProject.name='AsyncExecutor'
