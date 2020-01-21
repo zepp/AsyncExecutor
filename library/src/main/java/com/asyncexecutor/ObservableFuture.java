@@ -36,7 +36,7 @@ public interface ObservableFuture<T> extends Future<T>, Observable<T>, Completab
     ObservableFuture<T> submit();
 
     /**
-     * This method is wrapper around {@link Future<T>::get} that packs checked exception to {@link RuntimeException}
+     * This method is wrapper around {@link Future#get} that packs checked exception to {@link RuntimeException}
      *
      * @return current result
      */

@@ -56,7 +56,7 @@ public abstract class AbstractObservable<T> implements Observable<T> {
      * This method creates new {@link Subscriber} from {@link Observable<T>} to encapsulate
      * exact handler and adds it to subscribers list.
      *
-     * @param executor {@link Executor} to run the {@link Observable<T>::accept}
+     * @param executor {@link Executor} to run the {@link Observable#accept}
      * @param observer {@link Observable<T>} itself
      * @return new instance
      */
@@ -70,7 +70,7 @@ public abstract class AbstractObservable<T> implements Observable<T> {
      * This method creates new {@link Subscriber} from {@link Consumer<T>} to encapsulate
      * exact handler and adds it to subscribers list.
      *
-     * @param executor {@link Executor} to run the {@link Consumer<T>::accept}
+     * @param executor {@link Executor} to run the {@link Consumer#accept}
      * @param consumer {@link Consumer<T>} itself
      * @return new instance
      */
@@ -126,8 +126,8 @@ public abstract class AbstractObservable<T> implements Observable<T> {
      * This method is called when new {@link Subscriber} is subscribed. It provides a way to perform
      * some kind of initialization or start computation on first subscription.
      *
-     * @param subscriber
-     * @param isFirst
+     * @param subscriber {@link Subscriber} instance
+     * @param isFirst true if it is first subscriber, false otherwise
      * @return
      */
     @CallSuper
@@ -140,8 +140,8 @@ public abstract class AbstractObservable<T> implements Observable<T> {
      * This method is called when {@link Subscriber} is unsubscribed. It provides a way to release
      * some resources when last subscription is canceled.
      *
-     * @param subscriber
-     * @param isLast
+     * @param subscriber {@link Subscriber} instance
+     * @param isLast true if it is last subscriber, false otherwise
      * @return
      */
     @CallSuper

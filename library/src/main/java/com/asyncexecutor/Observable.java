@@ -21,7 +21,7 @@ public interface Observable<T> {
      * This method subscribes to current {@link Observable<T>}. It handles only successful results.
      * Handler is executed on specified <code>executor</code>.
      *
-     * @param executor executor to be used to run {@link Consumer<T>::accept}
+     * @param executor executor to be used to run {@link Consumer#accept}
      * @param consumer lambda or object to handle results
      * @return {@link Subscription<T>} to manage the subscription status
      */
@@ -43,7 +43,7 @@ public interface Observable<T> {
      * an api to handle errors and track moments when subscription is registered or unregistered.
      * Handler is executed on specified <code>executor</code>.
      *
-     * @param executor executor to be used to run {@link Observer<T>::accept}
+     * @param executor executor to be used to run {@link Observer#accept}
      * @param observer lambda or object to handle results
      * @return {@link Subscription<T>} to manage the subscription status
      */
