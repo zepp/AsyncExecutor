@@ -78,11 +78,14 @@ public abstract class AbstractFuture<T> extends AbstractObservable<T> implements
     }
 
     /**
-     * This method cancels current {@link AbstractFuture<T>}. Canceled future cannot be completed.
-     * If there is computation in progress then it also can be terminated.
+     * This method cancels current {@link AbstractFuture<T>} evaluation. Future state is changed to
+     * {@link State#CANCELED} so it cannot be completed, submitted or res-submitted anymore.
+     * If there is evaluation in progress then it also may be terminated. Canceled future is
+     * unsubscribed from all subscribers.
      *
-     * @param mayInterruptIfRunning terminate result computation if it is true. In most cases it means
-     *                              that current {@link Thread} is interrupted {@link Thread#interrupt}.
+     * @param mayInterruptIfRunning terminate evaluation if it is true. In most cases it means
+     *                              that current {@link Thread} is interrupted using method
+     *                              {@link Thread#interrupt}.
      * @return true if future has been successfully canceled
      */
     @Override
