@@ -9,8 +9,9 @@ public interface Subscription<T> extends Comparable<Subscription<T>> {
     /**
      * This method returns subscription ID. It is provided to be able to store item in
      * {@link java.util.Map} or {@link java.util.Set}.
+     * @return
      */
-    int getId();
+    long getId();
 
     /**
      * It returns {@link Observable<T>} that produces stream of values.
