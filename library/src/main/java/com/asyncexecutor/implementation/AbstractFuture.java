@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Base class that implement {@link ObservableFuture<T>} interface and extends {@link AbstractObservable<T>}.
+ * Base class that implements {@link ObservableFuture<T>} interface and extends {@link AbstractObservable<T>}.
  * It emits single value or stream of values depending on future type. Methods like {@link AbstractFuture#get()}
  * return last emitted value.
  *
@@ -25,11 +25,23 @@ public abstract class AbstractFuture<T> extends AbstractObservable<T> implements
     protected volatile Exception exception;
     private volatile State state = State.INITIAL;
 
+    /**
+     * This method creates new {@link AbstractFuture<T>} to be run on specified executor single
+     * or multiple times.
+     *
+     * @param executor           {@link Executor} instance
+     * @param isMultiCompletable future can be run or completed multiple times, false otherwise
+     */
     protected AbstractFuture(Executor executor, boolean isMultiCompletable) {
         super(executor);
         this.isMultiCompletable = isMultiCompletable;
     }
 
+    /**
+     * This method creates {@link AbstractFuture<T>} to be run on specified executor.
+     *
+     * @param executor {@link Executor} instance
+     */
     protected AbstractFuture(Executor executor) {
         this(executor, false);
     }
@@ -271,12 +283,14 @@ public abstract class AbstractFuture<T> extends AbstractObservable<T> implements
         INITIAL,
 
         /**
-         * This state is assigned when computation is started
+         * This state is assigned when future has been submitted for processing and it is in
+         * progress
          */
         COMPLETING,
 
         /**
-         * This state is assigned when computation is finished, value or error has been emitted
+         * This state is assigned when processing has been finished and value or error has been
+         * emitted
          */
         COMPLETED,
 

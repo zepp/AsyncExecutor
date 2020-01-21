@@ -29,9 +29,9 @@ public interface ObservableFuture<T> extends Future<T>, Observable<T>, Completab
     <D> ObservableFuture<D> map(Transformer<T, D> transformer);
 
     /**
-     * This method initiates evaluation of current {@link ObservableFuture<T>}
+     * This method submits {@link ObservableFuture<T>} to execution
      *
-     * @return
+     * @return current {@link ObservableFuture<T>}
      */
     ObservableFuture<T> submit();
 
