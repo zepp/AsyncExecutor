@@ -143,7 +143,7 @@ public abstract class AbstractFuture<T> extends AbstractObservable<T> implements
     }
 
     @Override
-    public T getResult() {
+    public T result() {
         try {
             return get();
         } catch (InterruptedException | ExecutionException e) {
