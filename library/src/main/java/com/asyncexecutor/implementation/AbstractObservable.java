@@ -108,7 +108,7 @@ public abstract class AbstractObservable<T> implements Observable<T> {
 
     /**
      * This is a basic method to emit new value or error that will be delivered to all {@link Subscriber}.
-     * If error is not null then actual value of <code>result</code> does not matter. It is not
+     * If error is not null then actual value of {@code result} does not matter. It is not
      * delivered to {@link Consumer<T>} subscribers in such case.
      *
      * @param result value

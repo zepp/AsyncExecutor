@@ -10,7 +10,7 @@ public interface Completable<T> {
      * Complete operation successfully
      *
      * @param result value or null
-     * @return <code>true<code/> is operation status is changed, <code>false<code/> if operation can
+     * @return {@code true} is operation status is changed, {@code false} if operation can
      * not be completed or has been already completed.
      */
     boolean complete(T result);
@@ -19,7 +19,7 @@ public interface Completable<T> {
      * Complete operation with error
      *
      * @param e error
-     * @return <code>true<code/> is operation status is changed, <code>false<code/> if operation can
+     * @return {@code true} is operation status is changed, {@code false} if operation can
      * not be completed or has been already completed.
      */
     boolean complete(Exception e);
@@ -27,7 +27,7 @@ public interface Completable<T> {
     /**
      * Getter that returns type of operation
      *
-     * @return <code>true<code/> if operation can be completed multiple times or <code>false<code/>
+     * @return {@code true} if operation can be completed multiple times or {@code false}
      * if operation can be completed only a once
      */
     boolean isMultiCompletable();

@@ -11,7 +11,7 @@ public interface Observer<T> {
     /**
      * This method handles values that are emitted by {@link Observable<T>}
      *
-     * @param result value or <code>null</code>.
+     * @param result value or {@code null}
      * @param e      exception that is not null in case of operation completed with error
      */
     void accept(T result, Exception e);

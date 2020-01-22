@@ -19,7 +19,7 @@ public interface Observable<T> {
 
     /**
      * This method subscribes to current {@link Observable<T>}. It handles only successful results.
-     * Handler is executed on specified <code>executor</code>.
+     * Handler is executed on specified {@code executor}.
      *
      * @param executor executor to be used to run {@link Consumer#accept}
      * @param consumer lambda or object to handle results
@@ -41,7 +41,7 @@ public interface Observable<T> {
      * This method subscribes to current {@link Observable<T>}. Successful results and errors can
      * be handled since {@link Observer<T>} is more advanced then {@link Consumer<T>} and provides
      * an api to handle errors and track moments when subscription is registered or unregistered.
-     * Handler is executed on specified <code>executor</code>.
+     * Handler is executed on specified {@code executor}.
      *
      * @param executor executor to be used to run {@link Observer#accept}
      * @param observer lambda or object to handle results
