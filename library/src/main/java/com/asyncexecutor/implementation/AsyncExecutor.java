@@ -353,7 +353,7 @@ public class AsyncExecutor extends AbstractExecutorService implements AsyncExecu
         final long id;
         final boolean isInfinitePolling;
         // count of processed runnables
-        volatile long processedCount;
+        volatile long executedCount;
         // count of thrown errors
         volatile long errorsCount;
         // count of onStartPolling method calls that filled internal queue with new commands
@@ -393,7 +393,11 @@ public class AsyncExecutor extends AbstractExecutorService implements AsyncExecu
         }
 
         public long getTransferRate() {
-            return (100 * queue.size() * transferCount) / processedCount;
+            return (100 * queue.size() * transferCount) / executedCount;
+        }
+
+        public long getExecutedCount() {
+            return executedCount;
         }
 
         @Override
@@ -409,10 +413,9 @@ public class AsyncExecutor extends AbstractExecutorService implements AsyncExecu
                     if (request == null) {
                         onPollingTimeout(this);
                     } else if (request.type == RequestType.EXECUTE) {
-                        processedCount++;
                         request.runnable.run();
+                        executedCount++;
                     } else if (request.type == RequestType.SHUTDOWN) {
-                        processedCount++;
                         break;
                     }
                 } catch (InterruptedException e) {
@@ -439,7 +442,7 @@ public class AsyncExecutor extends AbstractExecutorService implements AsyncExecu
         public String toString() {
             return "Worker{" +
                     "id=" + id +
-                    ", processedCount=" + processedCount +
+                    ", executedCount=" + executedCount +
                     ", errorsCount=" + errorsCount +
                     ", transferCount=" + transferCount +
                     '}';

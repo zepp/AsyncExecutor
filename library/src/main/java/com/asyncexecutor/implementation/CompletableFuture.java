@@ -74,11 +74,9 @@ public class CompletableFuture<T> extends AbstractFuture<T> implements Runnable 
         if (getState() == State.INITIAL) {
             getExecutor().execute(this);
         } else {
-            getExecutor().execute(() -> {
-                if (setState(State.INITIAL)) {
-                    run();
-                }
-            });
+            if (setState(State.INITIAL)) {
+                getExecutor().execute(this);
+            }
         }
         return this;
     }

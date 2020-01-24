@@ -34,7 +34,7 @@ public abstract class AbstractObservable<T> implements Observable<T> {
 
     @Override
     public Subscription<T> accept(Consumer<T> consumer) {
-        return addSubscriber(executor, consumer);
+        return accept(executor, consumer);
     }
 
     @Override
@@ -44,7 +44,7 @@ public abstract class AbstractObservable<T> implements Observable<T> {
 
     @Override
     public Subscription<T> observe(Observer<T> observer) {
-        return addSubscriber(executor, observer);
+        return observe(executor, observer);
     }
 
     @Override
