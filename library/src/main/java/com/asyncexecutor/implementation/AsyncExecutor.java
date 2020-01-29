@@ -64,6 +64,18 @@ public class AsyncExecutor extends AbstractExecutorService implements AsyncExecu
         this("async-executor", queue, maxWorkers, timeout, unit);
     }
 
+    protected ThreadGroup getThreadGroup() {
+        return threadGroup;
+    }
+
+    public TimeUnit getUnit() {
+        return unit;
+    }
+
+    public long getTimeout() {
+        return timeout;
+    }
+
     @Override
     protected <T> AsyncTask<T> newTaskFor(Runnable runnable, T value) {
         return new AsyncTask<>(this, runnable, value);
