@@ -1,5 +1,7 @@
 package com.asyncexecutor.implementation;
 
+import androidx.annotation.CallSuper;
+
 import com.asyncexecutor.Consumer;
 import com.asyncexecutor.ObservableFuture;
 import com.asyncexecutor.Observer;
@@ -206,7 +208,8 @@ public abstract class AbstractFuture<T> extends AbstractObservable<T> implements
      * @return true if future has been successfully completed
      */
     @Override
-    protected synchronized final boolean emit(T result) {
+    @CallSuper
+    protected synchronized boolean emit(T result) {
         if (setState(State.COMPLETED)) {
             this.result = result;
             this.exception = null;
@@ -226,7 +229,8 @@ public abstract class AbstractFuture<T> extends AbstractObservable<T> implements
      * @return true is future has been successfully completed
      */
     @Override
-    protected synchronized final boolean emit(Exception e) {
+    @CallSuper
+    protected synchronized boolean emit(Exception e) {
         if (setState(State.COMPLETED)) {
             this.exception = e;
             emit(null, e);
