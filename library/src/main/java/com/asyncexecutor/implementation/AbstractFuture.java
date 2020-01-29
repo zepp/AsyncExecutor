@@ -20,6 +20,7 @@ import java.util.concurrent.TimeoutException;
  * @param <T> type of value to be emitted
  */
 public abstract class AbstractFuture<T> extends AbstractObservable<T> implements ObservableFuture<T> {
+    private final static int NANOS_TO_MILLIS = 1000000;
     private final boolean isMultiCompletable;
     protected volatile T result;
     protected volatile Exception exception;
@@ -147,7 +148,7 @@ public abstract class AbstractFuture<T> extends AbstractObservable<T> implements
             return getResultOrException();
         } else if (state != State.CANCELED) {
             long nanos = unit.toNanos(timeout);
-            wait(nanos / 1000, (int) (nanos % 1000));
+            wait(nanos / NANOS_TO_MILLIS, (int) (nanos % NANOS_TO_MILLIS));
             if (state == State.COMPLETED) {
                 return getResultOrException();
             } else if (state != State.CANCELED) {
