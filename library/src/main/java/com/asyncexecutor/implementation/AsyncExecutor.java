@@ -16,6 +16,8 @@ import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
+import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -449,4 +451,13 @@ public class AsyncExecutor extends AbstractExecutorService implements AsyncExecu
         }
     }
 
+    private static class AsyncTask<T> extends CompletableFuture<T> implements RunnableFuture<T> {
+        AsyncTask(Executor executor, Callable<T> callable) {
+            super(executor, callable);
+        }
+
+        AsyncTask(Executor executor, Runnable runnable, T result) {
+            super(executor, runnable, result);
+        }
+    }
 }
