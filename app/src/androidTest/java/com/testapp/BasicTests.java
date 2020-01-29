@@ -3,12 +3,14 @@ package com.testapp;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.asyncexecutor.AsyncExecutorService;
 import com.asyncexecutor.ObservableFuture;
+import com.asyncexecutor.ScheduledAsyncExecutorService;
+import com.asyncexecutor.ScheduledObservableFuture;
 import com.asyncexecutor.implementation.AsyncContextWrapper;
 import com.asyncexecutor.implementation.AsyncExecutor;
 import com.asyncexecutor.implementation.CompletableFuture;
 import com.asyncexecutor.implementation.CompositeFuture;
+import com.asyncexecutor.implementation.ScheduledAsyncExecutor;
 
 import org.junit.After;
 import org.junit.Before;
@@ -42,7 +44,7 @@ public class BasicTests extends AsyncContextWrapper {
     private final Integer number = 100;
     private final AtomicInteger counter = new AtomicInteger();
     private final AtomicLong executedCount = new AtomicLong();
-    private AsyncExecutorService executor;
+    private ScheduledAsyncExecutorService executor;
     private boolean equals;
     private Exception exception;
 
@@ -52,7 +54,7 @@ public class BasicTests extends AsyncContextWrapper {
 
     @Before
     public void newExecutor() {
-        executor = new InstrumentedExecutor(new LinkedList<>(), 5, 100, TimeUnit.MILLISECONDS);
+        executor = new ScheduledAsyncExecutor("executor", new LinkedList<>(), 5, 100, TimeUnit.MILLISECONDS);
         executedCount.set(0);
         exception = null;
         equals = false;
@@ -81,6 +83,27 @@ public class BasicTests extends AsyncContextWrapper {
         wait();
         assertTrue(equals);
         assertEquals(string, future.get());
+    }
+
+    @Test(timeout = 1100)
+    public synchronized void simpleSchedule() throws Exception {
+        List<Long> list = Collections.synchronizedList(new ArrayList<>(10));
+        ScheduledObservableFuture<Long> future = executor.scheduleAtFixedRate(System::nanoTime,
+                10, 10, TimeUnit.MILLISECONDS);
+        addSubscription(future.accept(result -> {
+            list.add(result);
+            if (counter.incrementAndGet() == 100) {
+                future.cancel(false);
+                synchronized (this) {
+                    notify();
+                }
+            }
+        }));
+        wait();
+        assertEquals(100, counter.get());
+        for (int i = list.size() - 1; i > 0; i--) {
+            assertTrue(list.get(i) - list.get(i - 1) <= 100000001000L);
+        }
     }
 
     @Test(expected = ExecutionException.class)
