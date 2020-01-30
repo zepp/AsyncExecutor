@@ -61,33 +61,45 @@ public class ScheduledAsyncExecutor extends AsyncExecutor implements ScheduledAs
         return super.shutdownNow();
     }
 
+    private void checkShutdown() throws IllegalStateException {
+        if (isShutdown()) {
+            throw new IllegalStateException("executor is shutdown");
+        }
+    }
+
     @Override
     public ScheduledObservableFuture<?> schedule(Runnable command, long delay, TimeUnit unit) {
+        checkShutdown();
         return getScheduler().schedule(new AsyncScheduledFuture<>(this, command, unit.toNanos(delay)));
     }
 
     @Override
     public <V> ScheduledObservableFuture<V> schedule(Callable<V> callable, long delay, TimeUnit unit) {
+        checkShutdown();
         return getScheduler().schedule(new AsyncScheduledFuture<>(this, callable, unit.toNanos(delay)));
     }
 
     @Override
     public ScheduledObservableFuture<?> scheduleAtFixedRate(Runnable command, long initialDelay, long period, TimeUnit unit) {
+        checkShutdown();
         return getScheduler().schedule(new AsyncScheduledFuture<>(this, command, ScheduledType.FIXED_RATE, initialDelay, period, unit));
     }
 
     @Override
     public ScheduledObservableFuture<?> scheduleWithFixedDelay(Runnable command, long initialDelay, long delay, TimeUnit unit) {
+        checkShutdown();
         return getScheduler().schedule(new AsyncScheduledFuture<>(this, command, ScheduledType.FIXED_DELAY, initialDelay, delay, unit));
     }
 
     @Override
     public <V> ScheduledObservableFuture<V> scheduleAtFixedRate(Callable<V> callable, long initialDelay, long period, TimeUnit unit) {
+        checkShutdown();
         return getScheduler().schedule(new AsyncScheduledFuture<>(this, callable, ScheduledType.FIXED_RATE, initialDelay, period, unit));
     }
 
     @Override
     public <V> ScheduledObservableFuture<V> scheduleWithFixedDelay(Callable<V> callable, long initialDelay, long delay, TimeUnit unit) {
+        checkShutdown();
         return getScheduler().schedule(new AsyncScheduledFuture<>(this, callable, ScheduledType.FIXED_DELAY, initialDelay, delay, unit));
     }
 
@@ -131,7 +143,6 @@ public class ScheduledAsyncExecutor extends AsyncExecutor implements ScheduledAs
      * method.
      */
     private class Scheduler extends Thread {
-        private final static int NANOS_TO_MILLIS = 1000000;
         private final Queue<ScheduledRunnableFuture<?>> queue = new PriorityQueue<>(10,
                 (o1, o2) -> Long.compare(o1.getScheduledTime(TimeUnit.NANOSECONDS), o2.getScheduledTime(TimeUnit.NANOSECONDS)));
         private final AtomicBoolean isReleased = new AtomicBoolean();
@@ -185,8 +196,10 @@ public class ScheduledAsyncExecutor extends AsyncExecutor implements ScheduledAs
          * @param future {@link ScheduledRunnableFuture} instance
          */
         synchronized void cancel(ScheduledRunnableFuture future) {
+            if (future.equals(queue.peek())) {
+                notify();
+            }
             queue.remove(future);
-            notify();
         }
 
         /**
@@ -198,7 +211,9 @@ public class ScheduledAsyncExecutor extends AsyncExecutor implements ScheduledAs
          */
         synchronized <T> ScheduledRunnableFuture<T> schedule(ScheduledRunnableFuture<T> future) {
             queue.add(future);
-            notify();
+            if (future.equals(queue.peek())) {
+                notify();
+            }
             return future;
         }
     }

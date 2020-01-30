@@ -29,6 +29,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * submitted tasks.
  */
 public class AsyncExecutor extends AbstractExecutorService implements AsyncExecutorService {
+    protected final static int NANOS_TO_MILLIS = 1000000;
     private final static AtomicLong groupCounter = new AtomicLong();
     private final AtomicLong workerCounter = new AtomicLong();
     private final ThreadGroup threadGroup;
@@ -171,7 +172,7 @@ public class AsyncExecutor extends AbstractExecutorService implements AsyncExecu
             return true;
         } else {
             long nanos = unit.toNanos(timeout);
-            wait(nanos / 1000, (int) (nanos % 1000));
+            wait(nanos / NANOS_TO_MILLIS, (int) (nanos % NANOS_TO_MILLIS));
             return workers.isEmpty();
         }
     }
