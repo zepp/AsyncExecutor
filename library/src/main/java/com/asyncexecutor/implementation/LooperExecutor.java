@@ -1,3 +1,6 @@
+/*
+ * Copyright (c) 2020 Pavel A. Sokolov <pavel.zeppa@yandex.ru>
+ */
 package com.asyncexecutor.implementation;
 
 import android.os.Handler;
