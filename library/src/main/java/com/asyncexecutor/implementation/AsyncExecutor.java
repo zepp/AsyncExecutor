@@ -265,8 +265,10 @@ public class AsyncExecutor extends AbstractExecutorService implements AsyncExecu
                     notifyAll();
                 }
             } else {
-                while (!queue.isEmpty() && !worker.isFull()) {
+                int share = queue.size() > maxWorkers ? queue.size() / maxWorkers : 1;
+                while (!queue.isEmpty() && !worker.isFull() && share > 0) {
                     worker.post(queue.poll());
+                    share--;
                 }
                 return true;
             }
